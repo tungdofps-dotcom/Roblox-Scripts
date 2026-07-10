@@ -71,7 +71,7 @@ MenuCorner.CornerRadius = UDim.new(0, 16)
 MenuCorner.Parent = MainMenu
 
 local MenuStroke = Instance.new("UIStroke")
-MenuStroke.Color = Color3.fromRGB(0, 110, 255)
+MenuStroke.Color = Color3.fromRGB(0, 200, 80)
 MenuStroke.Thickness = 2
 MenuStroke.Parent = MainMenu
 
@@ -82,7 +82,7 @@ MenuTitle.Position = UDim2.new(0, 140, 0, 12)
 MenuTitle.Size = UDim2.new(0, 200, 0, 25)
 MenuTitle.BackgroundTransparency = 1
 MenuTitle.Text = "Fraud time"
-MenuTitle.TextColor3 = Color3.fromRGB(0, 140, 255)
+MenuTitle.TextColor3 = Color3.fromRGB(0, 215, 100)
 MenuTitle.TextSize = 18
 MenuTitle.Font = Enum.Font.GothamBold
 MenuTitle.TextXAlignment = Enum.TextXAlignment.Left
@@ -137,7 +137,7 @@ TabSettingBtn.Position = UDim2.new(0, 8, 0, 65)
 TabSettingBtn.Size = UDim2.new(1, -16, 0, 40)
 TabSettingBtn.BackgroundColor3 = Color3.fromRGB(15, 22, 36) -- Chưa chọn
 TabSettingBtn.Text = "Setting"
-TabSettingBtn.TextColor3 = Color3.fromRGB(120, 160, 220)
+TabSettingBtn.TextColor3 = Color3.fromRGB(120, 180, 140)
 TabSettingBtn.TextSize = 14
 TabSettingBtn.Font = Enum.Font.GothamBold
 local SettingBtnCorner = Instance.new("UICorner")
@@ -219,15 +219,7 @@ local function CreateToggle(parent, text, order, callback)
 end
 
 -- TẠO CÁC CHỨC NĂNG THEO ẢNH MẪU CỦA BẠN
-CreateToggle(MainPage, "Auto chrono clock", 1, function(state)
-    print("Auto chrono clock: ", state)
-    -- Thêm logic hack của bạn vào đây
-end)
 
-CreateToggle(MainPage, "Auto shot funk1d[normal]", 2, function(state)
-    print("Auto shot funk1d: ", state)
-    -- Thêm logic hack của bạn vào đây
-end)
 
 
 -- 6. CHUYỂN ĐỔI QUA LẠI GIỮA CÁC TÁB (MAIN / SETTING)
