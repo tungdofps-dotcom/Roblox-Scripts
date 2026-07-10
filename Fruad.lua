@@ -3,12 +3,12 @@ local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 
-if CoreGui:FindFirstChild("HamsterMenuSystem") then
+if CoreGui:FindFirstChild("FraudMenuSystem") then
     CoreGui.HamsterMenuSystem:Destroy()
 end
 
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "HamsterMenuSystem"
+ScreenGui.Name = "FraudMenuSystem"
 ScreenGui.Parent = CoreGui
 ScreenGui.ResetOnSpawn = false
 
@@ -61,7 +61,7 @@ MainMenu.Name = "MainMenu"
 MainMenu.Parent = ScreenGui
 MainMenu.Position = UDim2.new(0.5, 0, 0.5, 0)
 MainMenu.Size = UDim2.new(0, 0, 0, 0) -- Thu nhỏ lúc đầu
-MainMenu.BackgroundColor3 = Color3.fromRGB(11, 17, 28)
+MainMenu.BackgroundColor3 = Color3.fromRGB(11,20 ,16 )
 MainMenu.AnchorPoint = Vector2.new(0.5, 0.5)
 MainMenu.ClipsDescendants = true
 MainMenu.Visible = false
@@ -81,7 +81,7 @@ MenuTitle.Parent = MainMenu
 MenuTitle.Position = UDim2.new(0, 140, 0, 12)
 MenuTitle.Size = UDim2.new(0, 200, 0, 25)
 MenuTitle.BackgroundTransparency = 1
-MenuTitle.Text = "Hamster Script"
+MenuTitle.Text = "Fraud time"
 MenuTitle.TextColor3 = Color3.fromRGB(0, 140, 255)
 MenuTitle.TextSize = 18
 MenuTitle.Font = Enum.Font.GothamBold
