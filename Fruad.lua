@@ -224,21 +224,21 @@ end
 
 -- 6. CHUYỂN ĐỔI QUA LẠI GIỮA CÁC TÁB (MAIN / SETTING)
 TabMainBtn.MouseButton1Click:Connect(function()
-    TabMainBtn.BackgroundColor3 = Color3.fromRGB(0, 70, 150)
+    TabMainBtn.BackgroundColor3 = Color3.fromRGB(0,140, 60)
     TabMainBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
     TabSettingBtn.BackgroundColor3 = Color3.fromRGB(15, 22, 36)
-    TabSettingBtn.TextColor3 = Color3.fromRGB(120, 160, 220)
-    MainPage.Visible = true
-    SettingPage.Visible = false
+    TabSettingBtn.TextColor3 = Color3.fromRGB(120, 180, 140)
+    MainPage.Visible = false
+    SettingPage.Visible = true
 end)
 
 TabSettingBtn.MouseButton1Click:Connect(function()
-    TabSettingBtn.BackgroundColor3 = Color3.fromRGB(0, 70, 150)
+    TabSettingBtn.BackgroundColor3 = Color3.fromRGB(0, 140, 60)
     TabSettingBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
     TabMainBtn.BackgroundColor3 = Color3.fromRGB(15, 22, 36)
-    TabMainBtn.TextColor3 = Color3.fromRGB(120, 160, 220)
-    MainPage.Visible = false
-    SettingPage.Visible = true
+    TabMainBtn.TextColor3 = Color3.fromRGB(120, 180, 140)
+    MainPage.Visible = true
+    SettingPage.Visible = false
 end)
 
 
