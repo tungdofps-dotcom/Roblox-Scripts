@@ -1,3 +1,57 @@
+-- 1. KHỞI TẠO GUI CHÍNH
+local CoreGui = game:GetService("CoreGui")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+
+if CoreGui:FindFirstChild("FraudMenuSystem") then
+    CoreGui.HamsterMenuSystem:Destroy()
+end
+
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "FraudMenuSystem"
+ScreenGui.Parent = CoreGui
+ScreenGui.ResetOnSpawn = false
+-- 2. TẠO LOGO LƠ LỬNG (FLOATING BUTTON) - GIỮ NGUYÊN ẢNH CỦA BẠN
+local LogoButton = Instance.new("ImageButton")
+LogoButton.Name = "LogoButton"
+LogoButton.Parent = ScreenGui
+LogoButton.Position = UDim2.new(0.05, 0, 0.2, 0)
+LogoButton.Size = UDim2.new(0, 65, 0, 65)
+LogoButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+LogoButton.Image = "rbxthumb://type=Asset&id=129752335101046&w=150&h=150"
+LogoButton.AnchorPoint = Vector2.new(0.5, 0.5)
+
+local LogoCorner = Instance.new("UICorner")
+LogoCorner.CornerRadius = UDim.new(1, 0)
+LogoCorner.Parent = LogoButton
+
+local LogoStroke = Instance.new("UIStroke")
+LogoStroke.Color = Color3.fromRGB(0, 170, 255)
+LogoStroke.Thickness = 2
+LogoStroke.Parent = LogoButton
+
+-- KÉO THẢ LOGO
+local dragging, dragInput, dragStart, startPos
+local function update(input)
+    local delta = input.Position - dragStart
+    LogoButton.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+LogoButton.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = LogoButton.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then dragging = false end
+        end)
+    end
+end)
+LogoButton.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then dragInput = input end
+end)
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then update(input) end
+end)
 -- ==========================================
 -- HỆ THỐNG GET KEY (ĐẶT Ở ĐẦU SCRIPT CŨ)
 -- ==========================================
@@ -161,63 +215,6 @@ end)
 UserInputService.InputChanged:Connect(function(input)
     if input == dragInput and dragging then update(input) end
 end)
--- 1. KHỞI TẠO GUI CHÍNH
-local CoreGui = game:GetService("CoreGui")
-local TweenService = game:GetService("TweenService")
-local UserInputService = game:GetService("UserInputService")
-
-if CoreGui:FindFirstChild("FraudMenuSystem") then
-    CoreGui.HamsterMenuSystem:Destroy()
-end
-
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "FraudMenuSystem"
-ScreenGui.Parent = CoreGui
-ScreenGui.ResetOnSpawn = false
-
--- 2. TẠO LOGO LƠ LỬNG (FLOATING BUTTON) - GIỮ NGUYÊN ẢNH CỦA BẠN
-local LogoButton = Instance.new("ImageButton")
-LogoButton.Name = "LogoButton"
-LogoButton.Parent = ScreenGui
-LogoButton.Position = UDim2.new(0.05, 0, 0.2, 0)
-LogoButton.Size = UDim2.new(0, 65, 0, 65)
-LogoButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-LogoButton.Image = "rbxthumb://type=Asset&id=129752335101046&w=150&h=150"
-LogoButton.AnchorPoint = Vector2.new(0.5, 0.5)
-
-local LogoCorner = Instance.new("UICorner")
-LogoCorner.CornerRadius = UDim.new(1, 0)
-LogoCorner.Parent = LogoButton
-
-local LogoStroke = Instance.new("UIStroke")
-LogoStroke.Color = Color3.fromRGB(0, 170, 255)
-LogoStroke.Thickness = 2
-LogoStroke.Parent = LogoButton
-
--- KÉO THẢ LOGO
-local dragging, dragInput, dragStart, startPos
-local function update(input)
-    local delta = input.Position - dragStart
-    LogoButton.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-end
-LogoButton.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        dragStart = input.Position
-        startPos = LogoButton.Position
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then dragging = false end
-        end)
-    end
-end)
-LogoButton.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then dragInput = input end
-end)
-UserInputService.InputChanged:Connect(function(input)
-    if input == dragInput and dragging then update(input) end
-end)
-
-
 -- 3. TẠO KHUNG MENU CHÍNH (THEO MẪU ẢNH)
 local MainMenu = Instance.new("Frame")
 MainMenu.Name = "MainMenu"
