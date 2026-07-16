@@ -20,13 +20,13 @@ LogoButton.Size = UDim2.new(0, 65, 0, 65)
 LogoButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 LogoButton.Image = "rbxthumb://type=Asset&id=129752335101046&w=150&h=150"
 LogoButton.AnchorPoint = Vector2.new(0.5, 0.5)
-
+LogoButton.Visible = false
 local LogoCorner = Instance.new("UICorner")
 LogoCorner.CornerRadius = UDim.new(1, 0)
 LogoCorner.Parent = LogoButton
 
 local LogoStroke = Instance.new("UIStroke")
-LogoStroke.Color = Color3.fromRGB(0, 170, 255)
+LogoStroke.Color = Color3.fromRGB(0, 200, 80)
 LogoStroke.Thickness = 2
 LogoStroke.Parent = LogoButton
 
