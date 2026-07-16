@@ -1,3 +1,166 @@
+-- ==========================================
+-- HỆ THỐNG GET KEY (ĐẶT Ở ĐẦU SCRIPT CŨ)
+-- ==========================================
+local CorrectKey = "fraudontoday" -- Đổi chữ này thành Key bạn muốn đặt
+local GetKeyLink = "https://sub2unlock.io/0wrv6" -- Link trang web lấy key của bạn
+
+-- BẢNG GET KEY
+local KeyFrame = Instance.new("Frame")
+KeyFrame.Name = "KeyFrame"
+KeyFrame.Parent = ScreenGui
+KeyFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+KeyFrame.Size = UDim2.new(0, 360, 0, 220) 
+KeyFrame.BackgroundColor3 = Color3.fromRGB(11, 20, 16) -- Màu nền tối ánh xanh lá
+KeyFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+KeyFrame.ClipsDescendants = true
+
+local KeyCorner = Instance.new("UICorner")
+KeyCorner.CornerRadius = UDim.new(0, 14)
+KeyCorner.Parent = KeyFrame
+
+local KeyStroke = Instance.new("UIStroke")
+KeyStroke.Color = Color3.fromRGB(0, 200, 80) -- Viền xanh lá
+KeyStroke.Thickness = 2
+KeyStroke.Parent = KeyFrame
+
+-- Tiêu đề bảng Get Key
+local KeyTitle = Instance.new("TextLabel")
+KeyTitle.Parent = KeyFrame
+KeyTitle.Position = UDim2.new(0, 20, 0, 15)
+KeyTitle.Size = UDim2.new(0, 200, 0, 25)
+KeyTitle.BackgroundTransparency = 1
+KeyTitle.Text = "fraud time | Key System"
+KeyTitle.TextColor3 = Color3.fromRGB(0, 215, 100) -- Chữ màu xanh lá sáng
+KeyTitle.TextSize = 18
+KeyTitle.Font = Enum.Font.GothamBold
+KeyTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+-- Nút tắt nhanh bảng Get Key
+local CloseKeyBtn = Instance.new("TextButton")
+CloseKeyBtn.Parent = KeyFrame
+CloseKeyBtn.Position = UDim2.new(1, -35, 0, 15)
+CloseKeyBtn.Size = UDim2.new(0, 22, 0, 22)
+CloseKeyBtn.BackgroundColor3 = Color3.fromRGB(200, 40, 40)
+CloseKeyBtn.Text = "x"
+CloseKeyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+CloseKeyBtn.TextSize = 14
+CloseKeyBtn.Font = Enum.Font.GothamBold
+local CloseKeyCorner = Instance.new("UICorner")
+CloseKeyCorner.CornerRadius = UDim.new(1, 0)
+CloseKeyCorner.Parent = CloseKeyBtn
+
+CloseKeyBtn.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy() -- Tắt hoàn toàn menu khi đóng bảng key
+end)
+
+-- Ô NHẬP KEY (TextBox)
+local KeyInput = Instance.new("TextBox")
+KeyInput.Parent = KeyFrame
+KeyInput.Position = UDim2.new(0, 20, 0, 65)
+KeyInput.Size = UDim2.new(1, -40, 0, 45)
+KeyInput.BackgroundColor3 = Color3.fromRGB(8, 15, 12)
+KeyInput.PlaceholderText = "Nhập Key vào đây..."
+KeyInput.PlaceholderColor3 = Color3.fromRGB(80, 110, 90)
+KeyInput.Text = ""
+KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+KeyInput.TextSize = 14
+KeyInput.Font = Enum.Font.GothamSemibold
+
+local InputCorner = Instance.new("UICorner")
+InputCorner.CornerRadius = UDim.new(0, 8)
+InputCorner.Parent = KeyInput
+
+local InputStroke = Instance.new("UIStroke")
+InputStroke.Color = Color3.fromRGB(0, 120, 50) -- Viền ô nhập xanh lá tối
+InputStroke.Thickness = 1
+InputStroke.Parent = KeyInput
+
+-- NÚT BẤM "GET KEY"
+local GetKeyBtn = Instance.new("TextButton")
+GetKeyBtn.Parent = KeyFrame
+GetKeyBtn.Position = UDim2.new(0, 20, 0, 130)
+GetKeyBtn.Size = UDim2.new(0.45, -10, 0, 45)
+GetKeyBtn.BackgroundColor3 = Color3.fromRGB(15, 26, 20)
+GetKeyBtn.Text = "Get Key"
+GetKeyBtn.TextColor3 = Color3.fromRGB(120, 180, 140)
+GetKeyBtn.TextSize = 14
+GetKeyBtn.Font = Enum.Font.GothamBold
+
+local GetKeyCorner = Instance.new("UICorner")
+GetKeyCorner.CornerRadius = UDim.new(0, 8)
+GetKeyCorner.Parent = GetKeyBtn
+
+local GetKeyStroke = Instance.new("UIStroke")
+GetKeyStroke.Color = Color3.fromRGB(0, 120, 50)
+GetKeyStroke.Thickness = 1
+GetKeyStroke.Parent = GetKeyBtn
+
+-- NÚT BẤM "CHECK KEY"
+local CheckKeyBtn = Instance.new("TextButton")
+CheckKeyBtn.Parent = KeyFrame
+CheckKeyBtn.Position = UDim2.new(0.55, -10, 0, 130)
+CheckKeyBtn.Size = UDim2.new(0.45, 10, 0, 45)
+CheckKeyBtn.BackgroundColor3 = Color3.fromRGB(0, 140, 60) -- Màu xanh lá cây sáng
+CheckKeyBtn.Text = "Check Key"
+CheckKeyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+CheckKeyBtn.TextSize = 14
+CheckKeyBtn.Font = Enum.Font.GothamBold
+
+local CheckKeyCorner = Instance.new("UICorner")
+CheckKeyCorner.CornerRadius = UDim.new(0, 8)
+CheckKeyCorner.Parent = CheckKeyBtn
+
+-- SỰ KIỆN KHI BẤM NÚT
+GetKeyBtn.MouseButton1Click:Connect(function()
+    setclipboard(GetKeyLink) -- Sao chép link vào máy
+    KeyTitle.Text = "Đã sao chép link Get Key!"
+    task.wait(2)
+    KeyTitle.Text = "fraud time | Key System"
+end)
+
+CheckKeyBtn.MouseButton1Click:Connect(function()
+    if KeyInput.Text == CorrectKey then
+        KeyTitle.Text = "Key Đúng! Đang mở..."
+        KeyTitle.TextColor3 = Color3.fromRGB(0, 255, 0)
+        task.wait(1)
+        
+        -- Xóa bảng Get Key đi
+        KeyFrame:Destroy()
+        
+        -- Kích hoạt hiện nút Logo để người dùng bắt đầu mở Menu
+        LogoButton.Visible = true
+    else
+        KeyTitle.Text = "Sai Key! Hãy thử lại"
+        KeyTitle.TextColor3 = Color3.fromRGB(255, 50, 50)
+        KeyInput.Text = ""
+        task.wait(2)
+        KeyTitle.Text = "fraud time | Key System"
+        KeyTitle.TextColor3 = Color3.fromRGB(0, 215, 100)
+    end
+end)
+
+-- Cho phép di chuyển bảng Get Key
+local dragging, dragInput, dragStart, startPos
+local function update(input)
+    local delta = input.Position - dragStart
+    KeyFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+KeyFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = KeyFrame.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then dragging = false end
+        end)
+    end
+end)
+KeyFrame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then dragInput = input end
+end)
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then update(input) end
+end)
 -- 1. KHỞI TẠO GUI CHÍNH
 local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
