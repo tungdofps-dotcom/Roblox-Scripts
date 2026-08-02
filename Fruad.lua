@@ -307,16 +307,13 @@ task.spawn(function()
     end)
     
     -- PHẦN 1: TỰ ĐỘNG XÓA ĐẠN KẺ ĐỊCH & BUFF ĐẠN ĐỒNG MINH (Đã tách riêng điều kiện)
-    g.OnClientEvent:Connect(function(l, m, n)
+     g.OnClientEvent:Connect(function(l, m, n)
         if not getgenv().AutoRemoveProjectile then return end
         if not n or not n.Parent then return end;
         local o = m and d:HasTag(m, "Enemy")
         local p = m and d:HasTag(m, "Friendly")
         local q = string.lower(n.Name) == "superstar"
-        if o and not q then
-                    local o = m and d:HasTag(m, "Enemy")
-        local p = m and d:HasTag(m, "Friendly")
-        local q = string.lower(n.Name) == "superstar"
+        
         if o and not q then
             -- Kiểm tra xem đạn là BasePart hay Model để TP lên 1000 studs
             if n:IsA("BasePart") then
@@ -332,12 +329,27 @@ task.spawn(function()
                 end
             end
             
-            -- (Tùy chọn) Sau khi TP lên trời xong có thể xóa luôn hoặc giữ lại
+            -- Sau khi TP lên trời 1 giây thì xóa hẳn
             task.delay(1, function()
                 if n and n.Parent then n:Destroy() end
             end)
             return
         end;
+        
+        if p then
+            if n:IsA("BasePart") then
+                n.AssemblyLinearVelocity = n.AssemblyLinearVelocity * 1.1;
+                n.Size = n.Size * 1.1
+            elseif n:IsA("Model") then
+                for l, r in ipairs(n:GetDescendants()) do
+                    if r:IsA("BasePart") then r.Size = r.Size * 1.1 end
+                end;
+                if n.PrimaryPart then
+                    n.PrimaryPart.AssemblyLinearVelocity = n.PrimaryPart.AssemblyLinearVelocity * 1.1
+                end
+            end
+        end
+    end)
                     
     -- PHẦN 2: TỰ ĐỘNG NGẮM & BẮN MỤC TIÊU (AUTO SHOOT)
     e.RenderStepped:Connect(function()
