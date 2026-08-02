@@ -1,5 +1,5 @@
- -- ==========================================
--- SCRIPT MENU CHÍNH (MAIN + FUN + SETTING + AUTO SHOOT)
+-- ==========================================
+-- SCRIPT MENU CHÍNH (MAIN + FUN + SETTING + TÁCH RIÊNG AUTO SHOOT & XÓA ĐẠN)
 -- ==========================================
 
 local CoreGui = game:GetService("CoreGui")
@@ -15,7 +15,9 @@ ScreenGui.Name = "FraudMenuSystem"
 ScreenGui.Parent = CoreGui
 ScreenGui.ResetOnSpawn = false
 
+-- ==========================================
 -- 1. TẠO LOGO LƠ LỬNG (FLOATING BUTTON)
+-- ==========================================
 local LogoButton = Instance.new("ImageButton")
 LogoButton.Name = "LogoButton"
 LogoButton.Parent = ScreenGui
@@ -24,7 +26,7 @@ LogoButton.Size = UDim2.new(0, 65, 0, 65)
 LogoButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 LogoButton.Image = "rbxthumb://type=Asset&id=129752335101046&w=150&h=150"
 LogoButton.AnchorPoint = Vector2.new(0.5, 0.5)
-LogoButton.Visible = true -- Hiện luôn logo vì đã qua bước nhập Key
+LogoButton.Visible = true
 
 local LogoCorner = Instance.new("UICorner")
 LogoCorner.CornerRadius = UDim.new(1, 0)
@@ -73,7 +75,7 @@ MainMenu.AnchorPoint = Vector2.new(0.5, 0.5)
 MainMenu.Position = UDim2.new(0.5, 0, 0.5, 0)
 MainMenu.Size = UDim2.new(0, 500, 0, 320)
 MainMenu.BackgroundColor3 = Color3.fromRGB(15, 22, 36)
-MainMenu.Visible = true -- Hiện luôn MainMenu khi load xong
+MainMenu.Visible = true
 
 local MenuCorner = Instance.new("UICorner")
 MenuCorner.CornerRadius = Instance.new("UICorner").CornerRadius or UDim.new(0, 12)
@@ -224,8 +226,13 @@ local function CreateToggle(text, callback)
     end)
 end
 
+-- TẠO 2 NÚT GẠT RIÊNG BIỆT CHO TAB MAIN
 CreateToggle("Auto Shoot Target", function(state)
     getgenv().AutoShoot = state
+end)
+
+CreateToggle("Anti Enemy Projectile", function(state)
+    getgenv().AutoRemoveProjectile = state
 end)
 
 -- ==========================================
@@ -275,9 +282,10 @@ LogoButton.MouseButton1Click:Connect(function()
 end)
 
 -- ==========================================
--- 5. CHỨC NĂNG CHẠY NGẦM AUTO SHOOT
+-- 5. CHỨC NĂNG CHẠY NGẦM ĐÃ ĐƯỢC TÁCH RIÊNG
 -- ==========================================
 getgenv().AutoShoot = false
+getgenv().AutoRemoveProjectile = false
 
 task.spawn(function()
     local cloneref = cloneref or function(a) return a end;
@@ -298,8 +306,9 @@ task.spawn(function()
         if k.Name == "CrosshairUI" then j = k end
     end)
     
+    -- PHẦN 1: TỰ ĐỘNG XÓA ĐẠN KẺ ĐỊCH & BUFF ĐẠN ĐỒNG MINH (Đã tách riêng điều kiện)
     g.OnClientEvent:Connect(function(l, m, n)
-        if not getgenv().AutoShoot then return end
+        if not getgenv().AutoRemoveProjectile then return end
         if not n or not n.Parent then return end;
         local o = m and d:HasTag(m, "Enemy")
         local p = m and d:HasTag(m, "Friendly")
@@ -323,6 +332,7 @@ task.spawn(function()
         end
     end)
     
+    -- PHẦN 2: TỰ ĐỘNG NGẮM & BẮN MỤC TIÊU (AUTO SHOOT)
     e.RenderStepped:Connect(function()
         e.Heartbeat:Wait()
         if not getgenv().AutoShoot then return end
