@@ -307,50 +307,27 @@ task.spawn(function()
     end)
     
     -- PHẦN 1: TỰ ĐỘNG XÓA ĐẠN KẺ ĐỊCH & BUFF ĐẠN ĐỒNG MINH (Đã tách riêng điều kiện)
-     g.OnClientEvent:Connect(function(l, m, n)
-        if not getgenv().AutoRemoveProjectile then return end
-        if not n or not n.Parent then return end;
-        local o = m and d:HasTag(m, "Enemy")
-        local p = m and d:HasTag(m, "Friendly")
-        local q = string.lower(n.Name) == "superstar"
-        
-        if o and not q then
-            -- Kiểm tra xem đạn là BasePart hay Model để TP lên 1000 studs
+             if o and not q then
+            -- Duyệt qua mọi phần tử của viên đạn để kéo dịch chuyển lên cao
             if n:IsA("BasePart") then
                 n.CFrame = n.CFrame + Vector3.new(0, 1000, 0)
                 n.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
-            elseif n:IsA("Model") and n.PrimaryPart then
-                n:SetPrimaryPartCFrame(n.PrimaryPart.CFrame + Vector3.new(0, 1000, 0))
             elseif n:IsA("Model") then
+                -- Nếu là Model, ép toàn bộ các phần bên trong bay lên trời
                 for _, part in ipairs(n:GetDescendants()) do
                     if part:IsA("BasePart") then
                         part.CFrame = part.CFrame + Vector3.new(0, 1000, 0)
+                        part.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
                     end
                 end
             end
             
-            -- Sau khi TP lên trời 1 giây thì xóa hẳn
+            -- Sau 1 giây thì xóa hẳn viên đạn khỏi game
             task.delay(1, function()
                 if n and n.Parent then n:Destroy() end
             end)
             return
         end;
-        
-        if p then
-            if n:IsA("BasePart") then
-                n.AssemblyLinearVelocity = n.AssemblyLinearVelocity * 1.1;
-                n.Size = n.Size * 1.1
-            elseif n:IsA("Model") then
-                for l, r in ipairs(n:GetDescendants()) do
-                    if r:IsA("BasePart") then r.Size = r.Size * 1.1 end
-                end;
-                if n.PrimaryPart then
-                    n.PrimaryPart.AssemblyLinearVelocity = n.PrimaryPart.AssemblyLinearVelocity * 1.1
-                end
-            end
-        end
-    end)
-                    
     -- PHẦN 2: TỰ ĐỘNG NGẮM & BẮN MỤC TIÊU (AUTO SHOOT)
     e.RenderStepped:Connect(function()
         e.Heartbeat:Wait()
