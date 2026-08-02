@@ -1,5 +1,5 @@
 -- ==========================================
--- SCRIPT MENU CHÍNH (MAIN + FUN + SETTING + TÁCH RIÊNG AUTO SHOOT & XÓA ĐẠN)
+-- SCRIPT MENU HOÀN CHỈNH FULL CHỨC NĂNG (CÓ TOGGLE HIỆN ẢNH BÊN FUN)
 -- ==========================================
 
 local CoreGui = game:GetService("CoreGui")
@@ -148,6 +148,7 @@ Container.Position = UDim2.new(0, 130, 0, 10)
 Container.Size = UDim2.new(1, -140, 1, -20)
 Container.BackgroundTransparency = 1
 
+-- TRANG MAIN
 local MainPage = Instance.new("ScrollingFrame")
 MainPage.Name = "MainPage"
 MainPage.Parent = Container
@@ -158,6 +159,7 @@ MainPage.CanvasSize = UDim2.new(0, 0, 2, 0)
 MainPage.ScrollBarThickness = 2
 MainPage.Visible = true
 
+-- TRANG FUN
 local FunPage = Instance.new("ScrollingFrame")
 FunPage.Name = "FunPage"
 FunPage.Parent = Container
@@ -168,6 +170,7 @@ FunPage.CanvasSize = UDim2.new(0, 0, 2, 0)
 FunPage.ScrollBarThickness = 2
 FunPage.Visible = false
 
+-- TRANG SETTING
 local SettingPage = Instance.new("ScrollingFrame")
 SettingPage.Name = "SettingPage"
 SettingPage.Parent = Container
@@ -178,7 +181,27 @@ SettingPage.CanvasSize = UDim2.new(0, 0, 2, 0)
 SettingPage.ScrollBarThickness = 2
 SettingPage.Visible = false
 
-local function CreateToggle(text, callback)
+-- ==========================================
+-- 4. TẠO HÌNH ẢNH GÓC TRÊN CÙNG BÊN PHẢI (MẶC ĐỊNH ẨN)
+-- ==========================================
+local FunImage = Instance.new("ImageLabel")
+FunImage.Name = "FunImage"
+FunImage.Parent = FunPage
+FunImage.AnchorPoint = Vector2.new(1, 0)
+FunImage.Position = UDim2.new(1, -10, 0, 10) -- Sát góc trên phải
+FunImage.Size = UDim2.new(0, 80, 0, 80)
+FunImage.BackgroundTransparency = 1
+FunImage.Image = "rbxthumb://type=Asset&id=3611711264&w=150&h=150"
+FunImage.Visible = false -- ẨN đi, đợi bật nút gạt bên Fun mới hiện
+
+local ImageCorner = Instance.new("UICorner")
+ImageCorner.CornerRadius = UDim.new(0, 8)
+ImageCorner.Parent = FunImage
+
+-- ==========================================
+-- 5. HÀM TẠO TOGGLE TRONG TRANG MAIN
+-- ==========================================
+local function CreateMainToggle(text, callback)
     local Row = Instance.new("Frame")
     Row.Parent = MainPage
     Row.Size = UDim2.new(1, 0, 0, 55)
@@ -226,17 +249,74 @@ local function CreateToggle(text, callback)
     end)
 end
 
--- TẠO 2 NÚT GẠT RIÊNG BIỆT CHO TAB MAIN
-CreateToggle("Auto Shoot Target", function(state)
+-- ==========================================
+-- 6. HÀM TẠO TOGGLE TRONG TRANG FUN
+-- ==========================================
+local function CreateFunToggle(text, callback)
+    local Row = Instance.new("Frame")
+    Row.Parent = FunPage
+    Row.Size = UDim2.new(1, 0, 0, 55)
+    -- Trừ đi 1 do FunPage đang chứa cái FunImage bên trong
+    Row.Position = UDim2.new(0, 0, 0, (#FunPage:GetChildren() - 2) * 60)
+    Row.BackgroundTransparency = 1
+
+    local Label = Instance.new("TextLabel")
+    Label.Parent = Row
+    Label.Position = UDim2.new(0, 10, 0, 0)
+    Label.Size = UDim2.new(0.6, 0, 1, 0)
+    Label.BackgroundTransparency = 1
+    Label.Text = text
+    Label.TextColor3 = Color3.fromRGB(200, 225, 255)
+    Label.TextSize = 14
+    Label.Font = Enum.Font.GothamBold
+    Label.TextXAlignment = Enum.TextXAlignment.Left
+
+    local ToggleBtn = Instance.new("TextButton")
+    ToggleBtn.Parent = Row
+    ToggleBtn.Position = UDim2.new(1, -80, 0, 10)
+    ToggleBtn.Size = UDim2.new(0, 70, 0, 32)
+    ToggleBtn.BackgroundColor3 = Color3.fromRGB(24, 28, 38)
+    ToggleBtn.Text = "OFF"
+    ToggleBtn.TextColor3 = Color3.fromRGB(150, 150, 150)
+    ToggleBtn.TextSize = 12
+    ToggleBtn.Font = Enum.Font.GothamBold
+
+    local ToggleCorner = Instance.new("UICorner")
+    ToggleCorner.CornerRadius = UDim.new(1, 0)
+    ToggleCorner.Parent = ToggleBtn
+
+    local enabled = false
+    ToggleBtn.MouseButton1Click:Connect(function()
+        enabled = not enabled
+        if enabled then
+            ToggleBtn.BackgroundColor3 = Color3.fromRGB(0, 140, 60)
+            ToggleBtn.Text = "ON"
+            ToggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        else
+            ToggleBtn.BackgroundColor3 = Color3.fromRGB(24, 28, 38)
+            ToggleBtn.Text = "OFF"
+            ToggleBtn.TextColor3 = Color3.fromRGB(150, 150, 150)
+        end
+        callback(enabled)
+    end)
+end
+
+-- TẠO CÁC NÚT BÊN TRANG MAIN
+CreateMainToggle("Auto Shoot Target", function(state)
     getgenv().AutoShoot = state
 end)
 
-CreateToggle("Anti Enemy Projectile", function(state)
+CreateMainToggle("Anti Enemy Projectile", function(state)
     getgenv().AutoRemoveProjectile = state
 end)
 
+-- TẠO NÚT BẬT/TẮT ẢNH GÓC PHẢI BÊN TRANG FUN
+CreateFunToggle("Show Corner Image", function(state)
+    FunImage.Visible = state -- Bật ON thì hiện ảnh, OFF thì ẩn ảnh
+end)
+
 -- ==========================================
--- 4. XỬ LÝ SỰ KIỆN CHUYỂN TAB & ẨN HIỆN MENU
+-- 7. XỬ LÝ SỰ KIỆN CHUYỂN TAB & ẨN HIỆN MENU
 -- ==========================================
 TabMainBtn.MouseButton1Click:Connect(function()
     TabMainBtn.BackgroundColor3 = Color3.fromRGB(0, 140, 60)
@@ -282,7 +362,7 @@ LogoButton.MouseButton1Click:Connect(function()
 end)
 
 -- ==========================================
--- 5. CHỨC NĂNG CHẠY NGẦM ĐÃ ĐƯỢC TÁCH RIÊNG
+-- 8. CHỨC NĂNG CHẠY NGẦM (TÁCH RIÊNG 2 CHỨC NĂNG)
 -- ==========================================
 getgenv().AutoShoot = false
 getgenv().AutoRemoveProjectile = false
@@ -306,28 +386,32 @@ task.spawn(function()
         if k.Name == "CrosshairUI" then j = k end
     end)
     
-    -- PHẦN 1: TỰ ĐỘNG XÓA ĐẠN KẺ ĐỊCH & BUFF ĐẠN ĐỒNG MINH (Đã tách riêng điều kiện)
-             if o and not q then
-            -- Duyệt qua mọi phần tử của viên đạn để kéo dịch chuyển lên cao
-            if n:IsA("BasePart") then
-                n.CFrame = n.CFrame + Vector3.new(0, 1000, 0)
-                n.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
-            elseif n:IsA("Model") then
-                -- Nếu là Model, ép toàn bộ các phần bên trong bay lên trời
-                for _, part in ipairs(n:GetDescendants()) do
-                    if part:IsA("BasePart") then
-                        part.CFrame = part.CFrame + Vector3.new(0, 1000, 0)
-                        part.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
-                    end
-                end
-            end
-            
-            -- Sau 1 giây thì xóa hẳn viên đạn khỏi game
-            task.delay(1, function()
-                if n and n.Parent then n:Destroy() end
-            end)
+    -- PHẦN 1: TỰ ĐỘNG XÓA ĐẠN KẺ ĐỊCH & BUFF ĐẠN ĐỒNG MINH
+    g.OnClientEvent:Connect(function(l, m, n)
+        if not getgenv().AutoRemoveProjectile then return end
+        if not n or not n.Parent then return end;
+        local o = m and d:HasTag(m, "Enemy")
+        local p = m and d:HasTag(m, "Friendly")
+        local q = string.lower(n.Name) == "superstar"
+        if o and not q then
+            n:Destroy()
             return
         end;
+        if p then
+            if n:IsA("BasePart") then
+                n.AssemblyLinearVelocity = n.AssemblyLinearVelocity * 1.1;
+                n.Size = n.Size * 1.1
+            elseif n:IsA("Model") then
+                for l, r in ipairs(n:GetDescendants()) do
+                    if r:IsA("BasePart") then r.Size = r.Size * 1.1 end
+                end;
+                if n.PrimaryPart then
+                    n.PrimaryPart.AssemblyLinearVelocity = n.PrimaryPart.AssemblyLinearVelocity * 1.1
+                end
+            end
+        end
+    end)
+    
     -- PHẦN 2: TỰ ĐỘNG NGẮM & BẮN MỤC TIÊU (AUTO SHOOT)
     e.RenderStepped:Connect(function()
         e.Heartbeat:Wait()
