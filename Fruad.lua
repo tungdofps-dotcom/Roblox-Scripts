@@ -1,5 +1,5 @@
--- ==========================================
--- SCRIPT MENU HOÀN CHỈNH FULL CHỨC NĂNG (CÓ TOGGLE HIỆN ẢNH BÊN FUN)
+- -- ==========================================
+-- SCRIPT MENU HOÀN CHỈNH FULL CHỨC NĂNG (TÍCH HỢP AUTO GAMEK1D)
 -- ==========================================
 
 local CoreGui = game:GetService("CoreGui")
@@ -188,11 +188,11 @@ local FunImage = Instance.new("ImageLabel")
 FunImage.Name = "FunImage"
 FunImage.Parent = FunPage
 FunImage.AnchorPoint = Vector2.new(1, 0)
-FunImage.Position = UDim2.new(1, -10, 0, 10) -- Sát góc trên phải
+FunImage.Position = UDim2.new(1, -10, 0, 10)
 FunImage.Size = UDim2.new(0, 80, 0, 80)
 FunImage.BackgroundTransparency = 1
 FunImage.Image = "rbxthumb://type=Asset&id=3611711264&w=150&h=150"
-FunImage.Visible = false -- ẨN đi, đợi bật nút gạt bên Fun mới hiện
+FunImage.Visible = false 
 
 local ImageCorner = Instance.new("UICorner")
 ImageCorner.CornerRadius = UDim.new(0, 8)
@@ -256,7 +256,6 @@ local function CreateFunToggle(text, callback)
     local Row = Instance.new("Frame")
     Row.Parent = FunPage
     Row.Size = UDim2.new(1, 0, 0, 55)
-    -- Trừ đi 1 do FunPage đang chứa cái FunImage bên trong
     Row.Position = UDim2.new(0, 0, 0, (#FunPage:GetChildren() - 2) * 60)
     Row.BackgroundTransparency = 1
 
@@ -310,9 +309,13 @@ CreateMainToggle("Anti Enemy Projectile", function(state)
     getgenv().AutoRemoveProjectile = state
 end)
 
+CreateMainToggle("Auto Gamek1d / Minigame", function(state)
+    getgenv().AutoGamekid = state
+end)
+
 -- TẠO NÚT BẬT/TẮT ẢNH GÓC PHẢI BÊN TRANG FUN
 CreateFunToggle("Show Corner Image", function(state)
-    FunImage.Visible = state -- Bật ON thì hiện ảnh, OFF thì ẩn ảnh
+    FunImage.Visible = state
 end)
 
 -- ==========================================
@@ -362,11 +365,34 @@ LogoButton.MouseButton1Click:Connect(function()
 end)
 
 -- ==========================================
--- 8. CHỨC NĂNG CHẠY NGẦM (TÁCH RIÊNG 2 CHỨC NĂNG)
+-- 8. CHỨC NĂNG CHẠY NGẦM (SHOOT, PROJECTILE, GAMEK1D)
 -- ==========================================
 getgenv().AutoShoot = false
 getgenv().AutoRemoveProjectile = false
+getgenv().AutoGamekid = false
 
+-- TỪ ĐIỂN ĐÁP ÁN QUIZ CHÍNH XÁC
+local QuizAnswers = {
+    ["WHAT CHAPTER DOES THIS TAKE PLACE?"] = "CHAPTER FIVE",
+    ["WHAT TRAIT AM I?"] = "ZOMBIE",
+    ["UHHHH I FORGOT THE QUESTION."] = "PICK THIS ONE!",
+}
+
+-- Hàm tự động click UI
+local function AutoClick(uiElement)
+    if not uiElement then return end
+    for _, connection in pairs(getconnections(uiElement.MouseButton1Click)) do
+        connection:Fire()
+    end
+    for _, connection in pairs(getconnections(uiElement.MouseButton1Down)) do
+        connection:Fire()
+    end
+    for _, connection in pairs(getconnections(uiElement.Activated)) do
+        connection:Fire()
+    end
+end
+
+-- TASK CHẠY AUTO SHOOT & ANTI PROJECTILE
 task.spawn(function()
     local cloneref = cloneref or function(a) return a end;
     local b = cloneref(game:GetService("Players"))
@@ -386,7 +412,7 @@ task.spawn(function()
         if k.Name == "CrosshairUI" then j = k end
     end)
     
-    -- PHẦN 1: TỰ ĐỘNG XÓA ĐẠN KẺ ĐỊCH & BUFF ĐẠN ĐỒNG MINH
+    -- XÓA ĐẠN ĐỊCH & BUFF ĐẠN TA
     g.OnClientEvent:Connect(function(l, m, n)
         if not getgenv().AutoRemoveProjectile then return end
         if not n or not n.Parent then return end;
@@ -412,7 +438,7 @@ task.spawn(function()
         end
     end)
     
-    -- PHẦN 2: TỰ ĐỘNG NGẮM & BẮN MỤC TIÊU (AUTO SHOOT)
+    -- AUTO SHOOT
     e.RenderStepped:Connect(function()
         e.Heartbeat:Wait()
         if not getgenv().AutoShoot then return end
@@ -427,4 +453,70 @@ task.spawn(function()
             end
         end
     end)
+end)
+
+-- TASK CHẠY AUTO GAMEK1D & MINIGAME BYPASS (TRÁNH LỖI BOSS BẤT TỬ)
+task.spawn(function()
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
+    local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+    while task.wait(0.2) do
+        if not getgenv().AutoGamekid then continue end
+        
+        -- 1. REMOTE EVENT BYPASS FUN GUI (TẮT UI VÀ GỬI EVENT THẮNG ĐỂ NÉ LỖI BOSS BẤT TỬ)
+        local FunGui = PlayerGui:FindFirstChild("FunGui")
+        if FunGui then
+            local SuccessEvent = FunGui:FindFirstChild("SuccessEvent")
+            if SuccessEvent and SuccessEvent:IsA("RemoteEvent") then
+                SuccessEvent:FireServer(true)
+                if FunGui:IsA("ScreenGui") then
+                    FunGui.Enabled = false
+                elseif FunGui:IsA("Frame") then
+                    FunGui.Visible = false
+                end
+                task.wait(1)
+            end
+        end
+
+        -- 2. DỰ PHÒNG CHẠY CLICK THỦ CÔNG KHI CÓ GAMEK1D GUI
+        for _, gui in pairs(PlayerGui:GetChildren()) do
+            if gui:IsA("ScreenGui") and string.find(string.lower(gui.Name), "gamek1d") then
+                -- Tắt PopUps
+                local PopUps = gui:FindFirstChild("PopUps")
+                if PopUps then
+                    for _, popup in pairs(PopUps:GetChildren()) do
+                        if popup.Visible then
+                            for _, btn in pairs(popup:GetDescendants()) do
+                                if btn:IsA("GuiButton") and btn.Visible then
+                                    AutoClick(btn)
+                                end
+                            end
+                        end
+                    end
+                end
+
+                -- Giải Quiz
+                local GamesFolder = gui:FindFirstChild("Games")
+                if GamesFolder then
+                    local Quiz = GamesFolder:FindFirstChild("ImpossibleQuiz")
+                    if Quiz and Quiz.Visible then
+                        local QuestionLabel = Quiz:FindFirstChild("Question")
+                        local AnswersFolder = Quiz:FindFirstChild("Answers")
+                        if QuestionLabel and AnswersFolder then
+                            local rightA = QuizAnswers[QuestionLabel.Text]
+                            if rightA then
+                                for _, ansBtn in pairs(AnswersFolder:GetChildren()) do
+                                    local textLabel = ansBtn:FindFirstChildOfClass("TextLabel")
+                                    if (textLabel and textLabel.Text == rightA) or (ansBtn:IsA("TextButton") and ansBtn.Text == rightA) then
+                                        AutoClick(ansBtn)
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
 end)
