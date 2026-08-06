@@ -1,7 +1,3 @@
-- -- ==========================================
--- SCRIPT MENU HOÀN CHỈNH FULL CHỨC NĂNG (TÍCH HỢP AUTO GAMEK1D)
--- ==========================================
-
 local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
@@ -15,9 +11,6 @@ ScreenGui.Name = "FraudMenuSystem"
 ScreenGui.Parent = CoreGui
 ScreenGui.ResetOnSpawn = false
 
--- ==========================================
--- 1. TẠO LOGO LƠ LỬNG (FLOATING BUTTON)
--- ==========================================
 local LogoButton = Instance.new("ImageButton")
 LogoButton.Name = "LogoButton"
 LogoButton.Parent = ScreenGui
@@ -37,7 +30,6 @@ LogoStroke.Color = Color3.fromRGB(0, 200, 80)
 LogoStroke.Thickness = 2
 LogoStroke.Parent = LogoButton
 
--- KÉO THẢ LOGO
 local dragging, dragInput, dragStart, startPos
 local function update(input)
     local delta = input.Position - dragStart
@@ -65,9 +57,6 @@ UserInputService.InputChanged:Connect(function(input)
     if input == dragInput and dragging then update(input) end
 end)
 
--- ==========================================
--- 2. MENU CHÍNH (MAIN MENU)
--- ==========================================
 local MainMenu = Instance.new("Frame")
 MainMenu.Name = "MainMenu"
 MainMenu.Parent = ScreenGui
@@ -86,7 +75,6 @@ MenuStroke.Color = Color3.fromRGB(0, 170, 255)
 MenuStroke.Thickness = 2
 MenuStroke.Parent = MainMenu
 
--- THANH SIDEBAR BÊN TRÁI
 local Sidebar = Instance.new("Frame")
 Sidebar.Parent = MainMenu
 Sidebar.Position = UDim2.new(0, 10, 0, 10)
@@ -97,7 +85,6 @@ local SidebarCorner = Instance.new("UICorner")
 SidebarCorner.CornerRadius = UDim.new(0, 12)
 SidebarCorner.Parent = Sidebar
 
--- Nút Tab MAIN
 local TabMainBtn = Instance.new("TextButton")
 TabMainBtn.Parent = Sidebar
 TabMainBtn.Position = UDim2.new(0, 8, 0, 15)
@@ -111,7 +98,6 @@ local MainBtnCorner = Instance.new("UICorner")
 MainBtnCorner.CornerRadius = UDim.new(0, 8)
 MainBtnCorner.Parent = TabMainBtn
 
--- Nút Tab FUN
 local TabFunBtn = Instance.new("TextButton")
 TabFunBtn.Parent = Sidebar
 TabFunBtn.Position = UDim2.new(0, 8, 0, 65)
@@ -125,7 +111,6 @@ local FunBtnCorner = Instance.new("UICorner")
 FunBtnCorner.CornerRadius = UDim.new(0, 8)
 FunBtnCorner.Parent = TabFunBtn
 
--- Nút Tab SETTING
 local TabSettingBtn = Instance.new("TextButton")
 TabSettingBtn.Parent = Sidebar
 TabSettingBtn.Position = UDim2.new(0, 8, 0, 115)
@@ -139,16 +124,12 @@ local SettingBtnCorner = Instance.new("UICorner")
 SettingBtnCorner.CornerRadius = UDim.new(0, 8)
 SettingBtnCorner.Parent = TabSettingBtn
 
--- ==========================================
--- 3. CÁC TRANG NỘI DUNG (CONTAINER & PAGES)
--- ==========================================
 local Container = Instance.new("Frame")
 Container.Parent = MainMenu
 Container.Position = UDim2.new(0, 130, 0, 10)
 Container.Size = UDim2.new(1, -140, 1, -20)
 Container.BackgroundTransparency = 1
 
--- TRANG MAIN
 local MainPage = Instance.new("ScrollingFrame")
 MainPage.Name = "MainPage"
 MainPage.Parent = Container
@@ -159,7 +140,6 @@ MainPage.CanvasSize = UDim2.new(0, 0, 2, 0)
 MainPage.ScrollBarThickness = 2
 MainPage.Visible = true
 
--- TRANG FUN
 local FunPage = Instance.new("ScrollingFrame")
 FunPage.Name = "FunPage"
 FunPage.Parent = Container
@@ -170,7 +150,6 @@ FunPage.CanvasSize = UDim2.new(0, 0, 2, 0)
 FunPage.ScrollBarThickness = 2
 FunPage.Visible = false
 
--- TRANG SETTING
 local SettingPage = Instance.new("ScrollingFrame")
 SettingPage.Name = "SettingPage"
 SettingPage.Parent = Container
@@ -181,9 +160,6 @@ SettingPage.CanvasSize = UDim2.new(0, 0, 2, 0)
 SettingPage.ScrollBarThickness = 2
 SettingPage.Visible = false
 
--- ==========================================
--- 4. TẠO HÌNH ẢNH GÓC TRÊN CÙNG BÊN PHẢI (MẶC ĐỊNH ẨN)
--- ==========================================
 local FunImage = Instance.new("ImageLabel")
 FunImage.Name = "FunImage"
 FunImage.Parent = FunPage
@@ -198,9 +174,6 @@ local ImageCorner = Instance.new("UICorner")
 ImageCorner.CornerRadius = UDim.new(0, 8)
 ImageCorner.Parent = FunImage
 
--- ==========================================
--- 5. HÀM TẠO TOGGLE TRONG TRANG MAIN
--- ==========================================
 local function CreateMainToggle(text, callback)
     local Row = Instance.new("Frame")
     Row.Parent = MainPage
@@ -249,9 +222,6 @@ local function CreateMainToggle(text, callback)
     end)
 end
 
--- ==========================================
--- 6. HÀM TẠO TOGGLE TRONG TRANG FUN
--- ==========================================
 local function CreateFunToggle(text, callback)
     local Row = Instance.new("Frame")
     Row.Parent = FunPage
@@ -300,7 +270,6 @@ local function CreateFunToggle(text, callback)
     end)
 end
 
--- TẠO CÁC NÚT BÊN TRANG MAIN
 CreateMainToggle("Auto Shoot Target", function(state)
     getgenv().AutoShoot = state
 end)
@@ -313,14 +282,10 @@ CreateMainToggle("Auto Gamek1d / Minigame", function(state)
     getgenv().AutoGamekid = state
 end)
 
--- TẠO NÚT BẬT/TẮT ẢNH GÓC PHẢI BÊN TRANG FUN
 CreateFunToggle("Show Corner Image", function(state)
     FunImage.Visible = state
 end)
 
--- ==========================================
--- 7. XỬ LÝ SỰ KIỆN CHUYỂN TAB & ẨN HIỆN MENU
--- ==========================================
 TabMainBtn.MouseButton1Click:Connect(function()
     TabMainBtn.BackgroundColor3 = Color3.fromRGB(0, 140, 60)
     TabMainBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -364,21 +329,16 @@ LogoButton.MouseButton1Click:Connect(function()
     MainMenu.Visible = not MainMenu.Visible
 end)
 
--- ==========================================
--- 8. CHỨC NĂNG CHẠY NGẦM (SHOOT, PROJECTILE, GAMEK1D)
--- ==========================================
 getgenv().AutoShoot = false
 getgenv().AutoRemoveProjectile = false
 getgenv().AutoGamekid = false
 
--- TỪ ĐIỂN ĐÁP ÁN QUIZ CHÍNH XÁC
 local QuizAnswers = {
     ["WHAT CHAPTER DOES THIS TAKE PLACE?"] = "CHAPTER FIVE",
     ["WHAT TRAIT AM I?"] = "ZOMBIE",
     ["UHHHH I FORGOT THE QUESTION."] = "PICK THIS ONE!",
 }
 
--- Hàm tự động click UI
 local function AutoClick(uiElement)
     if not uiElement then return end
     for _, connection in pairs(getconnections(uiElement.MouseButton1Click)) do
@@ -392,7 +352,6 @@ local function AutoClick(uiElement)
     end
 end
 
--- TASK CHẠY AUTO SHOOT & ANTI PROJECTILE
 task.spawn(function()
     local cloneref = cloneref or function(a) return a end;
     local b = cloneref(game:GetService("Players"))
@@ -412,7 +371,6 @@ task.spawn(function()
         if k.Name == "CrosshairUI" then j = k end
     end)
     
-    -- XÓA ĐẠN ĐỊCH & BUFF ĐẠN TA
     g.OnClientEvent:Connect(function(l, m, n)
         if not getgenv().AutoRemoveProjectile then return end
         if not n or not n.Parent then return end;
@@ -438,7 +396,6 @@ task.spawn(function()
         end
     end)
     
-    -- AUTO SHOOT
     e.RenderStepped:Connect(function()
         e.Heartbeat:Wait()
         if not getgenv().AutoShoot then return end
@@ -455,7 +412,6 @@ task.spawn(function()
     end)
 end)
 
--- TASK CHẠY AUTO GAMEK1D & MINIGAME BYPASS (TRÁNH LỖI BOSS BẤT TỬ)
 task.spawn(function()
     local Players = game:GetService("Players")
     local LocalPlayer = Players.LocalPlayer
@@ -464,7 +420,6 @@ task.spawn(function()
     while task.wait(0.2) do
         if not getgenv().AutoGamekid then continue end
         
-        -- 1. REMOTE EVENT BYPASS FUN GUI (TẮT UI VÀ GỬI EVENT THẮNG ĐỂ NÉ LỖI BOSS BẤT TỬ)
         local FunGui = PlayerGui:FindFirstChild("FunGui")
         if FunGui then
             local SuccessEvent = FunGui:FindFirstChild("SuccessEvent")
@@ -479,10 +434,8 @@ task.spawn(function()
             end
         end
 
-        -- 2. DỰ PHÒNG CHẠY CLICK THỦ CÔNG KHI CÓ GAMEK1D GUI
         for _, gui in pairs(PlayerGui:GetChildren()) do
             if gui:IsA("ScreenGui") and string.find(string.lower(gui.Name), "gamek1d") then
-                -- Tắt PopUps
                 local PopUps = gui:FindFirstChild("PopUps")
                 if PopUps then
                     for _, popup in pairs(PopUps:GetChildren()) do
@@ -496,7 +449,6 @@ task.spawn(function()
                     end
                 end
 
-                -- Giải Quiz
                 local GamesFolder = gui:FindFirstChild("Games")
                 if GamesFolder then
                     local Quiz = GamesFolder:FindFirstChild("ImpossibleQuiz")
